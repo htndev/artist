@@ -5,18 +5,31 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "i18n:download": "localazy download",
+    "i18n:upload": "localazy upload"
   },
   "dependencies": {
+    "@quasar/extras": "^1.10.0",
+    "@xbeat/client-toolkit": "file:../client-toolkit/xbeat-client-toolkit-1.0.0.tgz",
+    "@xbeat/toolkit": "file:../toolkit/xbeat-toolkit-1.0.0.tgz",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "quasar": "^1.15.7",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
+    "vue-apollo": "^3.0.7",
     "vue-class-component": "^7.2.3",
+    "vue-i18n": "^8.24.2",
     "vue-property-decorator": "^9.1.2",
     "vue-router": "^3.2.0",
-    "vuex": "^3.4.0"
+    "vue-svg-inline-loader": "^2.1.2",
+    "vuex": "^3.4.0",
+    "vuex-module-decorators": "^1.0.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^12.0.1",
+    "@commitlint/config-conventional": "^12.0.1",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -31,15 +44,27 @@
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^6.2.2",
+    "graphql-tag": "^2.11.0",
+    "husky": "=4",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
     "lint-staged": "^9.5.0",
+    "postcss-loader": "^4.2.0",
     "prettier": "^2.2.1",
+    "sass-loader": "^10.1.1",
     "typescript": "~4.1.5",
+    "vue-cli-plugin-apollo": "~0.22.2",
+    "vue-cli-plugin-quasar": "~3.0.1",
     "vue-template-compiler": "^2.6.11"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
     "*.{js,jsx,vue,ts,tsx}": [

@@ -7,6 +7,9 @@ node_modules
 .env.local
 .env.*.local
 
+# i18n
+src/i18n/*.json
+
 # Log files
 npm-debug.log*
 yarn-debug.log*
