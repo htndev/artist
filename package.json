@@ -10,12 +10,11 @@
     "i18n:upload": "localazy upload"
   },
   "dependencies": {
-    "@quasar/extras": "^1.10.0",
     "@xbeat/client-toolkit": "file:../client-toolkit/xbeat-client-toolkit-1.0.0.tgz",
     "@xbeat/toolkit": "file:../toolkit/xbeat-toolkit-1.0.0.tgz",
+    "@xbeat/ui-kit": "file:../xbeat-ui-kit/xbeat-ui-kit-0.1.0.tgz",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
-    "quasar": "^1.15.7",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
     "vue-apollo": "^3.0.7",
@@ -42,6 +41,7 @@
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
     "eslint": "^6.7.2",
+    "eslint-plugin-graphql": "^4.0.0",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^6.2.2",
     "graphql-tag": "^2.11.0",
@@ -54,7 +54,6 @@
     "sass-loader": "^10.1.1",
     "typescript": "~4.1.5",
     "vue-cli-plugin-apollo": "~0.22.2",
-    "vue-cli-plugin-quasar": "~3.0.1",
     "vue-template-compiler": "^2.6.11"
   },
   "gitHooks": {

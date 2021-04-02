@@ -1,0 +1,5 @@
+{
+  getPreferences {
+    language
+  }
+}
