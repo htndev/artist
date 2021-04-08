@@ -1,7 +1,6 @@
 <template>
   <q-header elevated class="header">
     <q-toolbar>
-      <q-btn flat dense round @click="changedDrawer" aria-label="Menu" icon="menu" />
       <router-link to="/">
         <logo small />
       </router-link>
@@ -41,14 +40,10 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import Avatar from '@/components/Common/Avatar.vue';
 import { UserModule } from '@/store/modules/user';
-import { DrawerModule } from '@/store/modules/drawer';
 import { User } from '@/common/types';
 import { Nullable } from '@xbeat/toolkit';
-@Component({
-  components: { Avatar }
-})
+@Component
 export default class TheHeader extends Vue {
   get user(): Nullable<User> {
     return UserModule.user;
@@ -62,9 +57,7 @@ export default class TheHeader extends Vue {
   get showUsernaneTooltip(): boolean {
     return this.username.length > 12;
   }
-  changedDrawer() {
-    DrawerModule.toggle();
-  }
+
   logout() {
     UserModule.logout();
   }
@@ -73,7 +66,8 @@ export default class TheHeader extends Vue {
 
 <style lang="less" scoped>
 @import '../assets/styles/colors.less';
+
 .header {
-  background: @purple;
+  background: @primary;
 }
 </style>

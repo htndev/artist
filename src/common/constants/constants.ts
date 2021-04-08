@@ -1,3 +1,4 @@
+import { ApiEndpoint } from '@xbeat/toolkit';
 import { Tokens } from '@/common/types';
 
 export const ENDPOINTS = {
@@ -16,3 +17,5 @@ export const EMPTY_TOKENS: Tokens = {
   studio: '',
   media: ''
 };
+
+export const STUDIO_REDIRECT_QUERY_PARAM = `?to=${ApiEndpoint.Studio}`;
