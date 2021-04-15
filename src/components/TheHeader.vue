@@ -23,13 +23,6 @@
             </q-item-label>
           </q-item>
           <q-item class="items-center justify-end" clickable>
-            <q-item-label lines="1">
-              <router-link to="/settings" class="text-decoration-none color-black font-size-14">
-                {{ $t('settings.title') }}
-              </router-link>
-            </q-item-label>
-          </q-item>
-          <q-item class="items-center justify-end" clickable>
             <q-item-label lines="1" @click="logout">{{ $t('logout') }}</q-item-label>
           </q-item>
         </template>

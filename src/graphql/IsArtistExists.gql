@@ -1,0 +1,5 @@
+query isArtistExists($artistInput: ArtistExistsInput!) {
+  isArtistExists(isArtistExistsInput: $artistInput) {
+    exists
+  }
+}

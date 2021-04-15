@@ -9,7 +9,8 @@ export const ENDPOINTS = {
 
 export const CLIENTS = {
   ID: process.env.ID_URL || 'http://localhost:8080',
-  HOMEPAGE: process.env.HOMEPAGE_URL || 'http://localhost:7070'
+  HOMEPAGE: process.env.HOMEPAGE_URL || 'http://localhost:7070',
+  PLAYER: process.env.PLAYER_URL || 'http://localhost:6060'
 };
 
 export const EMPTY_TOKENS: Tokens = {

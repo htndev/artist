@@ -1,4 +1,4 @@
-import { ApiEndpoint } from '@xbeat/toolkit';
+import { ApiEndpoint, Nullable } from '@xbeat/toolkit';
 import { Language } from '@/common/constants/language';
 
 export type Tokens = { [k in ApiEndpoint]: string };
@@ -18,4 +18,11 @@ export interface User {
 
 export interface Preferences {
   language: Language;
+}
+
+export interface Artist {
+  name: string;
+  url: string;
+  avatar: Nullable<string>;
+  header: Nullable<string>;
 }

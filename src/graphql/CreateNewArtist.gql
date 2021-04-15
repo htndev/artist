@@ -1,0 +1,5 @@
+mutation createArtist($newArtistInput: NewArtistInput!) {
+  createArtist(newArtistInput: $newArtistInput) {
+    status
+  }
+}

@@ -6,6 +6,7 @@
     "files": "src/i18n/en.json"
   },
   "download": {
-    "files": "src/i18n/${lang}.json"
+    "files": "src/i18n/${lang}.json",
+    "includeSourceLang": true
   }
 }

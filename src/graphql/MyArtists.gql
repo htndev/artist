@@ -1,0 +1,8 @@
+{
+  myArtists {
+    name
+    url
+    avatar
+    header
+  }
+}

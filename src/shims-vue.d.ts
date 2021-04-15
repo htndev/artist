@@ -5,3 +5,4 @@ declare module '*.vue' {
 
 declare module '*.gql';
 declare module '@xbeat/ui-kit';
+declare module '*.png';

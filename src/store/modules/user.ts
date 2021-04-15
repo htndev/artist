@@ -2,14 +2,14 @@ import { passport } from '@/common/apollo/passport';
 import { CLIENTS, EMPTY_TOKENS, STUDIO_REDIRECT_QUERY_PARAM } from '@/common/constants/constants';
 import { Tokens, User as UserType } from '@/common/types';
 import { InitializeStore } from '@/common/utils/initialize-store';
-import TokensQuery from '@/graphql/Tokens.gql';
-import MeQuery from '@/graphql/Me.gql';
+import { redirect } from '@/common/utils/redirect';
 import LogoutMutation from '@/graphql/Logout.gql';
+import MeQuery from '@/graphql/Me.gql';
+import TokensQuery from '@/graphql/Tokens.gql';
 import store from '@/store';
+import { StatusType } from '@xbeat/client-toolkit';
 import { isNil, isNull, Nullable } from '@xbeat/toolkit';
 import { Action, getModule, Module, Mutation, VuexModule } from 'vuex-module-decorators';
-import { StatusType } from '@xbeat/client-toolkit';
-import { redirect } from '@/common/utils/redirect';
 
 @Module({ dynamic: true, store, name: 'user', namespaced: true })
 export class User extends VuexModule implements InitializeStore {
@@ -85,23 +85,19 @@ export class User extends VuexModule implements InitializeStore {
       this.SET_TOKENS(data.tokens);
     } catch (e) {
       console.log(Object.entries(e));
+      // redirect(`${CLIENTS.ID}/${STUDIO_REDIRECT_QUERY_PARAM}`);
     }
   }
 
   @Action
   async identify(): Promise<void> {
-    try {
-      const { data, errors } = await passport.query<{ me: UserType }>({ query: MeQuery });
-      console.log(errors);
+    const { data, errors } = await passport.query<{ me: UserType }>({ query: MeQuery });
 
-      if (errors) {
-        throw errors;
-      }
-
-      this.SET_USER(data.me);
-    } catch (e) {
-      console.log('error...');
+    if (errors) {
+      throw errors;
     }
+
+    this.SET_USER(data.me);
   }
 }
 
