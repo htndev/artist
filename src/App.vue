@@ -12,15 +12,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import TheHeader from '@/components/TheHeader.vue';
-import { UserModule } from '@/store/modules/user';
-import { initialize } from '@/common/utils/initialize-store';
-import { PreferencesModule } from '@/store/modules/preferences';
-import { ArtistModule } from '@/store/modules/artist';
 
 @Component({ components: { TheHeader } })
-export default class App extends Vue {
-  async created(): Promise<void> {
-    await initialize(UserModule, PreferencesModule, ArtistModule);
-  }
-}
+export default class App extends Vue {}
 </script>

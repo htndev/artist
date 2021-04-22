@@ -10,6 +10,7 @@
     "i18n:upload": "localazy upload"
   },
   "dependencies": {
+    "@types/cropperjs": "^1.3.0",
     "@xbeat/client-toolkit": "file:../client-toolkit/xbeat-client-toolkit-1.0.0.tgz",
     "@xbeat/toolkit": "file:../toolkit/xbeat-toolkit-1.0.0.tgz",
     "@xbeat/ui-kit": "file:../xbeat-ui-kit/xbeat-ui-kit-0.1.0.tgz",

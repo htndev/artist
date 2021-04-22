@@ -13,10 +13,15 @@ import { Action, getModule, Module, Mutation, VuexModule } from 'vuex-module-dec
 
 @Module({ dynamic: true, store, name: 'user', namespaced: true })
 export class User extends VuexModule implements InitializeStore {
+  isInitialized = false;
   private isUserFetching = false;
   private identity: Nullable<UserType> = null;
 
   tokens: Tokens = { ...EMPTY_TOKENS };
+
+  get hasTokens(): boolean {
+    return Object.keys(this.tokens).length > 0;
+  }
 
   get user(): Nullable<UserType> {
     return this.identity;
@@ -32,6 +37,11 @@ export class User extends VuexModule implements InitializeStore {
 
   get isUserInitialized(): boolean {
     return !isNull(this.user);
+  }
+
+  @Mutation
+  APP_INITIALIZED(): void {
+    this.isInitialized = true;
   }
 
   @Mutation
@@ -54,6 +64,7 @@ export class User extends VuexModule implements InitializeStore {
   async initialize(): Promise<void> {
     await this.fetchTokens();
     await this.identify();
+    this.APP_INITIALIZED();
   }
 
   @Action
@@ -84,8 +95,7 @@ export class User extends VuexModule implements InitializeStore {
 
       this.SET_TOKENS(data.tokens);
     } catch (e) {
-      console.log(Object.entries(e));
-      // redirect(`${CLIENTS.ID}/${STUDIO_REDIRECT_QUERY_PARAM}`);
+      redirect(`${CLIENTS.ID}/${STUDIO_REDIRECT_QUERY_PARAM}`);
     }
   }
 

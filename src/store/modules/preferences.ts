@@ -10,6 +10,7 @@ import { Action, getModule, Module, Mutation, VuexModule } from 'vuex-module-dec
 
 @Module({ dynamic: true, store, name: 'preferences', namespaced: true })
 export class Preferences extends VuexModule implements InitializeStore {
+  isInitialized = false;
   language = Language.EN;
   _availableLanguages: Language[] = [];
 
@@ -33,6 +34,11 @@ export class Preferences extends VuexModule implements InitializeStore {
       value: key,
       label: LanguageName[key]
     }));
+  }
+
+  @Mutation
+  APP_INITIALIZED(): void {
+    this.isInitialized = true;
   }
 
   @Mutation
@@ -65,6 +71,7 @@ export class Preferences extends VuexModule implements InitializeStore {
     });
 
     this.SET_CURRENT_LANGUAGE(preferences.language);
+    this.APP_INITIALIZED();
   }
 }
 

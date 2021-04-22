@@ -1,6 +1,7 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
+    <router-link to="new-artist">Create new artist</router-link>
+    <router-link to="a">Artist's list</router-link>
   </div>
 </template>
 

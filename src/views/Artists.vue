@@ -51,15 +51,29 @@ export default class Artists extends Vue {
 </script>
 
 <style lang="less" scoped>
+@import '../assets/styles/colors.less';
+
 .artists {
   &--list {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: 200px;
     grid-gap: 10px;
+    background: @white;
 
     &--item {
-      span {
+      text-decoration: none;
+      height: 100%;
+      transform: scale(1);
+      border: 1px solid @secondary;
+      transition: all 0.15s ease-in;
+
+      h4 {
+        color: @black;
+      }
+
+      &:hover {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+        transform: scale(1.05);
       }
     }
   }

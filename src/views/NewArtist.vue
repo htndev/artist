@@ -6,7 +6,9 @@
     </div>
     <new-artist-popup v-model="showPopup" />
     <p class="text-center">
-      <a :href="playerLink" class="text-h4">{{ $t('new-artist.back-to-player') }}</a>
+      <a :href="playerLink" class="text-h4 text-decoration-none text-purple-5">
+        {{ $t('new-artist.back-to-player') }}
+      </a>
     </p>
   </div>
 </template>

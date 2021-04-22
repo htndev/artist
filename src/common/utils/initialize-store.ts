@@ -1,4 +1,4 @@
-export type InitializeStore = { initialize(): Promise<void> };
+export type InitializeStore = { initialize(): Promise<void>; isInitialized: boolean };
 type FunctionType = (...args: any[]) => void | Promise<void>;
 
 type Initialization = InitializeStore | FunctionType | Promise<any>;
