@@ -1,12 +1,12 @@
 <template>
   <div class="artist-avatar">
-    <span class="artist-avatar--overlay text-bold cursor-pointer" @click="uploadAvatar">{{
-      $t('upload.new-avatar')
-    }}</span>
+    <span class="artist-avatar--overlay text-bold cursor-pointer" @click="uploadAvatar">
+      {{ $t('upload.new-avatar') }}
+    </span>
     <q-avatar size="150px">
       <q-img :src="getAvatarImage(artist.avatar)" ratio="1" />
     </q-avatar>
-    <cropper-popup v-model="showCropPopup" :src="editingFile" @cropped="cropped" :loading="cropButtonLoading" />
+    <image-cropper-popup v-model="showCropPopup" :src="editingFile" @cropped="cropped" :loading="cropButtonLoading" />
   </div>
 </template>
 
@@ -17,12 +17,11 @@ import { fallbackImage } from '@/common/utils/image-fallback';
 import { ArtistEntity } from '@/common/entities/artist';
 import { ArtistModule } from '@/store/modules/artist';
 import { Nullable } from '@xbeat/toolkit';
-import CropperPopup from '../Common/CropperPopup.vue';
 import { fileToDataUrl } from '@xbeat/client-toolkit';
 
 const MAX_AVATAR_SIZE = 1000000;
 
-@Component({ components: { CropperPopup } })
+@Component
 export default class ArtistAvatar extends Vue {
   showCropPopup = false;
   cropButtonLoading = false;
@@ -79,6 +78,7 @@ export default class ArtistAvatar extends Vue {
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
     background: rgba(@dark-purple, 0.7);
     color: @white;
     opacity: 0;

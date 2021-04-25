@@ -1,0 +1,5 @@
+mutation updateArtistHeader($artistInput: UpdateArtistHeaderInput!) {
+  updateArtistHeader(updateArtistHeaderInput: $artistInput) {
+    status
+  }
+}

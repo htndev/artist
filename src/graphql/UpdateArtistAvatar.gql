@@ -1,0 +1,5 @@
+mutation updateArtistAvatar($updateArtistAvatarInput: UpdateArtistAvatarInput!) {
+  updateArtistAvatar(updateArtistAvatarInput: $updateArtistAvatarInput) {
+    status
+  }
+}

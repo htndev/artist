@@ -9,6 +9,10 @@ import store from '@/store';
 import { ExistsType } from '@xbeat/client-toolkit';
 import { Maybe, Nullable } from '@xbeat/toolkit';
 import { Action, getModule, Module, Mutation, VuexModule } from 'vuex-module-decorators';
+import mediaEndpoint from '@/common/endpoints/media';
+import UpdateArtistAvatarMutation from '@/graphql/UpdateArtistAvatar.gql';
+import UpdateArtistHeaderMutation from '@/graphql/UpdateArtistHeader.gql';
+import Vue from 'vue';
 
 @Module({ dynamic: true, store, name: 'artist', namespaced: true })
 export default class Artist extends VuexModule implements InitializeStore {
@@ -39,6 +43,26 @@ export default class Artist extends VuexModule implements InitializeStore {
   @Mutation
   SET_ARTISTS(artists: ArtistType[]): void {
     this.artists = artists.map(artist => new ArtistEntity(artist));
+  }
+
+  @Mutation
+  SET_ARTIST_AVATAR({ url, avatar }: { url: string; avatar: string }): void {
+    const artistIndex = findArtistIndex(this.artists, 'url', url);
+    const artist = this.artists[artistIndex];
+
+    artist.avatar = avatar;
+
+    Vue.set(this.artists, artistIndex, artist);
+  }
+
+  @Mutation
+  SET_ARTIST_HEADER({ url, header }: { url: string; header: string }): void {
+    const artistIndex = findArtistIndex(this.artists, 'url', url);
+    const artist = this.artists[artistIndex];
+
+    artist.header = header;
+
+    Vue.set(this.artists, artistIndex, artist);
   }
 
   @Mutation
@@ -106,10 +130,50 @@ export default class Artist extends VuexModule implements InitializeStore {
   }
 
   @Action
-  async updateArtistAvatar({ id, file }: { id: string; file: Blob }): Promise<void> {
-    // TODO: Upload file and update artist avatar
-    console.log(id, file);
+  async updateArtistAvatar({ id: url, file }: { id: string; file: Blob }): Promise<void> {
+    const {
+      data: {
+        files: [avatar]
+      }
+    } = await mediaEndpoint.uploadImage(file);
+
+    await studio.mutate({
+      mutation: UpdateArtistAvatarMutation,
+      variables: {
+        updateArtistAvatarInput: {
+          url,
+          avatar
+        }
+      }
+    });
+
+    this.SET_ARTIST_AVATAR({ url, avatar });
   }
+
+  @Action
+  async updateArtistHeader({ id: url, file }: { id: string; file: Blob }): Promise<void> {
+    const {
+      data: {
+        files: [header]
+      }
+    } = await mediaEndpoint.uploadImage(file);
+
+    await studio.mutate({
+      mutation: UpdateArtistHeaderMutation,
+      variables: {
+        artistInput: {
+          url,
+          header
+        }
+      }
+    });
+
+    this.SET_ARTIST_HEADER({ url, header });
+  }
+}
+
+function findArtistIndex(artists: ArtistEntity[], field: keyof ArtistEntity, value: any): number {
+  return artists.findIndex(artist => artist[field] === value);
 }
 
 export const ArtistModule = getModule(Artist);
