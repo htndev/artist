@@ -1,8 +1,12 @@
 <template>
   <div class="artists">
-    <h3 class="text-center">Your artists</h3>
+    <new-artist-popup v-model="showNewArtistPopup" />
+    <h3 class="text-center">{{ $t('artist.your-artists') }}</h3>
     <template v-if="hasArtists">
-      <q-input v-model="search" :label="$t('search')" outlined />
+      <div class="row">
+        <q-input v-model="search" class="col-grow" :label="$t('search')" outlined />
+        <q-btn :label="$t('artist.create-new-one')" class="q-ml-md" @click="openNewArtistPopup" />
+      </div>
       <div class="artists--list q-mt-md" v-if="filteredArtists.length">
         <router-link class="artists--list--item" v-for="artist in filteredArtists" :key="artist.url" :to="artist.link">
           <q-img :src="getImage(artist.avatar)" ratio="1"></q-img>
@@ -26,10 +30,12 @@ import ARTIST_AVATAR_DEFAULT from '@/assets/images/ARTIST-AVATAR-FALLBACK.png';
 import { ArtistModule } from '@/store/modules/artist';
 import { Nullable, isNull } from '@xbeat/toolkit';
 import { ArtistEntity } from '@/common/entities/artist';
+import NewArtistPopup from '@/components/NewArtistPopup.vue';
 
-@Component
+@Component({ components: { NewArtistPopup } })
 export default class Artists extends Vue {
   search = '';
+  showNewArtistPopup = false;
 
   get artists(): ArtistEntity[] {
     return ArtistModule.artists;
@@ -42,6 +48,10 @@ export default class Artists extends Vue {
 
   get hasArtists(): boolean {
     return ArtistModule.hasUserArtists;
+  }
+
+  openNewArtistPopup(): void {
+    this.showNewArtistPopup = true;
   }
 
   private getImage(image: Nullable<string>) {

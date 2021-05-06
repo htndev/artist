@@ -8,7 +8,7 @@ class MediaEndpoint extends BaseEndpoint {
     super(`${ENDPOINTS.MEDIA}/v1`);
   }
 
-  async uploadImage(...files: Blob[]) {
+  async upload(...files: Blob[]) {
     const fd = new FormData();
     files.forEach(file => fd.append('files', file));
 

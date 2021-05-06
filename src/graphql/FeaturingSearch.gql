@@ -1,0 +1,7 @@
+query getArtists($artistsSearch: ArtistSearchInput!) {
+  getArtists(artistSearchInput: $artistsSearch) {
+    name
+    url
+    avatar
+  }
+}

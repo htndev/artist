@@ -16,11 +16,6 @@ Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
-    path: '/',
-    name: Home.name,
-    component: Home
-  },
-  {
     path: '/new-artist',
     name: 'NewArtist',
     component: () => import(/* webpackChunkName: "about" */ '@/views/NewArtist.vue')
@@ -30,20 +25,26 @@ const routes: Array<RouteConfig> = [
     name: 'Artist',
     component: () => import(/* webpackChunkName: "artist" */ '@/views/Artist.vue'),
     beforeEnter: async (to, from, next) => {
-      if (isNil(to.params.id)) {
+      const artistUrl = to.params.id;
+      if (isNil(artistUrl)) {
         next('/a');
       }
 
-      if (!(await ArtistModule.userHasArtist(to.params.id))) {
+      const hasUserArtist = await ArtistModule.userHasArtist(artistUrl);
+
+      if (!hasUserArtist) {
         next('/404');
       }
 
-      ArtistModule.SET_CURRENT_ARTIST(to.params.id);
+      ArtistModule.SET_CURRENT_ARTIST(artistUrl);
+
+      await ArtistModule.getArtistAlbums(artistUrl);
       next();
     }
   },
   {
     path: '/a',
+    alias: '/',
     name: 'Artists',
     component: () => import(/* webpackChunkName: "artists" */ '@/views/Artists.vue')
   },

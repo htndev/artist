@@ -43,7 +43,11 @@ export default class ArtistAvatar extends Vue {
       }
       const [file] = [...files];
       if (file.size > MAX_AVATAR_SIZE) {
-        this.$q.notify({ message: 'File is too big.', type: 'negative', position: 'bottom-right' });
+        this.$q.notify({
+          message: this.$t('error.file.big', ['']) as string,
+          type: 'negative',
+          position: 'bottom-right'
+        });
         return;
       }
       this.editingFile = await fileToDataUrl(file);

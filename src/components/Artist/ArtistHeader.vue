@@ -56,7 +56,11 @@ export default class ArtistHeader extends Vue {
       const [file] = [...files];
 
       if (file.size > MAX_HEADER_SIZE) {
-        this.$q.notify({ message: 'File is too big.', type: 'negative', position: 'bottom-right' });
+        this.$q.notify({
+          message: this.$t('error.file.big', ['']) as string,
+          type: 'negative',
+          position: 'bottom-right'
+        });
         return;
       }
 

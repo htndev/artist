@@ -28,8 +28,6 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import IsArtistExists from '@/graphql/IsArtistExists.gql';
-import { ExistsType } from '@xbeat/client-toolkit';
 import { FIELD_LENGTH } from '@xbeat/toolkit';
 import { ArtistModule } from '@/store/modules/artist';
 import { CLIENTS } from '@/common/constants/constants';

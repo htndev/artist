@@ -20,3 +20,5 @@ export const EMPTY_TOKENS: Tokens = {
 };
 
 export const STUDIO_REDIRECT_QUERY_PARAM = `?to=${ApiEndpoint.Studio}`;
+
+export const SONG_EXTENSION = (): RegExp => /(\.mp3)$/gi;
