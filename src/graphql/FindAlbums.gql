@@ -1,0 +1,19 @@
+query findAlbums($search: AlbumsSearchInput!) {
+  findAlbums(search: $search) {
+    name
+    url
+    cover
+  	released
+    songs {
+      name
+      file
+      released
+      url
+      feat {
+        name
+        url
+        avatar
+      }
+    }
+  }
+}

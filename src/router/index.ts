@@ -1,3 +1,4 @@
+import { sleep } from './../common/utils/sleep';
 import { initialize } from './../common/utils/initialize-store';
 import { ArtistModule } from '@/store/modules/artist';
 import { PreferencesModule } from '@/store/modules/preferences';

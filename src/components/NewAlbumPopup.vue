@@ -117,12 +117,12 @@ import { TranslateResult } from 'vue-i18n';
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { fileToDataUrl } from '@xbeat/client-toolkit';
 import SongEditable from '@/components/Song/SongEditable.vue';
-import { Song } from '@/common/types';
 import { formatSong } from '@/common/utils/format-song';
 import Draggable from 'vuedraggable';
 import DateTimePickerPopup from '@/components/Common/DateTimePickerPopup.vue';
-import { format } from 'date-fns';
 import { ArtistModule } from '@/store/modules/artist';
+import { toBaseFormat } from '@xbeat/client-toolkit';
+import { Song } from '@/common/entities/song';
 
 const MAX_COVER_SIZE = 2000000;
 type ValidationResult = boolean | TranslateResult;
@@ -179,7 +179,7 @@ export default class NewAlbumPopup extends Vue {
   get publishText(): TranslateResult {
     return this.releaseDate === 'now'
       ? this.$t('album.release-now')
-      : this.$t('album.release-date', [format(this.releaseDate.getTime(), 'dd.MM.yyyy HH:mm')]);
+      : this.$t('album.release-date', [toBaseFormat(this.releaseDate.getTime())]);
   }
 
   get isAlbumPublishing(): boolean {

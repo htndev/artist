@@ -82,13 +82,13 @@
 </template>
 
 <script lang="ts">
-import { Song } from '@/common/types';
 import { Vue, Component, Prop, PropSync } from 'vue-property-decorator';
 import FeautringSearchQuery from '@/graphql/FeaturingSearch.gql';
 import eventBus from '@/common/event-bus';
 import { ArtistEntity } from '@/common/entities/artist';
 import { ArtistModule } from '@/store/modules/artist';
 import { Artist } from '@/common/types';
+import { Song } from '@/common/entities/song';
 
 @Component({
   filters: {

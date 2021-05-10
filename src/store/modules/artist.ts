@@ -2,12 +2,16 @@ import { studio } from '@/common/apollo/studio';
 import mediaEndpoint from '@/common/endpoints/media';
 import { Album } from '@/common/entities/album';
 import { ArtistEntity } from '@/common/entities/artist';
-import { AlbumFilterCriteria, Artist as ArtistType, Song } from '@/common/types';
+import { ReadonlyAlbum } from '@/common/entities/readonly-album';
+import { ReadonlySong } from '@/common/entities/readonly-song';
+import { Song } from '@/common/entities/song';
+import { AlbumFilterCriteria, Artist as ArtistType, RawAlbum } from '@/common/types';
 import { InitializeStore } from '@/common/utils/initialize-store';
 import { sleep } from '@/common/utils/sleep';
 import ChangeAlbumReleaseDate from '@/graphql/ChangeAlbumReleaseDate.gql';
 import CreateNewAlbumMutation from '@/graphql/CreateNewAlbum.gql';
 import CreateNewArtistMutation from '@/graphql/CreateNewArtist.gql';
+import FindAlbumsQuery from '@/graphql/FindAlbums.gql';
 import GetAlbumsQuery from '@/graphql/GetAlbums.gql';
 import IsArtistExistsQuery from '@/graphql/IsArtistExists.gql';
 import MyArtistsQuery from '@/graphql/MyArtists.gql';
@@ -20,13 +24,12 @@ import { isNull, Maybe, Nullable } from '@xbeat/toolkit';
 import Vue from 'vue';
 import { Action, getModule, Module, Mutation, VuexModule } from 'vuex-module-decorators';
 
-type RawAlbum = { name: string; cover: Nullable<string>; released: string; url: string };
-
 @Module({ dynamic: true, store, name: 'artist', namespaced: true })
 export default class Artist extends VuexModule implements InitializeStore {
   isInitialized = false;
   isAlbumPublishing = false;
   isAlbumsFetching = false;
+  isCurrentAlbumLoading = false;
   artists: ArtistEntity[] = [];
   currentArtist: Nullable<ArtistEntity> = null;
   currentArtistAlbums: Album[] = [];
@@ -34,6 +37,7 @@ export default class Artist extends VuexModule implements InitializeStore {
   publishingSteps = 0;
   publishedSteps = 0;
   albumsFilterCriteria: AlbumFilterCriteria = 'all';
+  currentAlbum: Nullable<ReadonlyAlbum> = null;
 
   get hasUserArtists(): boolean {
     return !!this.artists.length;
@@ -154,6 +158,31 @@ export default class Artist extends VuexModule implements InitializeStore {
   @Mutation
   SET_CURRENT_ALBUMS(albums: RawAlbum[]): void {
     this.currentArtistAlbums = albums.map(({ name, url, released, cover }) => new Album(name, url, cover, released));
+  }
+
+  @Mutation
+  SET_CURRENT_ALBUM(album: ReadonlyAlbum): void {
+    this.currentAlbum = album;
+  }
+
+  @Mutation
+  CURRENT_ALBUM_LOADING_STARTED(): void {
+    this.isCurrentAlbumLoading = true;
+  }
+
+  @Mutation
+  CURRENT_ALBUM_LOADING_COMPLETED(): void {
+    this.isCurrentAlbumLoading = false;
+  }
+
+  @Action
+  async setCurrentAlbum(rawAlbum: RawAlbum): Promise<void> {
+    const songs = await Promise.all(
+      rawAlbum.songs.map(song => new ReadonlySong(song.name, song.file, song.feat).init())
+    );
+    this.SET_CURRENT_ALBUM(
+      new ReadonlyAlbum(rawAlbum.name, rawAlbum.url, rawAlbum.cover, new Date(rawAlbum.released), songs)
+    );
   }
 
   @Action
@@ -371,6 +400,18 @@ export default class Artist extends VuexModule implements InitializeStore {
     });
 
     await this.getArtistAlbums(this.currentArtist!.url);
+  }
+
+  @Action
+  async getAlbums(url: string): Promise<RawAlbum[]> {
+    const {
+      data: { findAlbums: albums }
+    } = await studio.query<{ findAlbums: RawAlbum[] }>({
+      query: FindAlbumsQuery,
+      variables: { search: { url } }
+    });
+
+    return albums;
   }
 }
 

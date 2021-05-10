@@ -40,7 +40,7 @@ import copyToClipboard from 'copy-to-clipboard';
 import { Album } from '@/common/entities/album';
 import { ArtistModule } from '@/store/modules/artist';
 import DateTimePickerPopup from '@/components/Common/DateTimePickerPopup.vue';
-import { format } from 'date-fns';
+import { toBaseFormat } from '@xbeat/client-toolkit';
 
 @Component({ components: { DateTimePickerPopup } })
 export default class AlbumPlate extends Vue {
@@ -89,7 +89,7 @@ export default class AlbumPlate extends Vue {
     this.$q.notify({
       message: this.$t('album.released-date-changed', [
         this.album.name,
-        format(this.releaseDate.getTime(), 'dd.MM.yyyy HH:mm')
+        toBaseFormat(this.releaseDate.getTime())
       ]) as string,
       position: 'bottom-right',
       type: 'positive'
