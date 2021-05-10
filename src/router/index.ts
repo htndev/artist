@@ -37,8 +37,6 @@ const routes: Array<RouteConfig> = [
       }
 
       ArtistModule.SET_CURRENT_ARTIST(artistUrl);
-
-      await ArtistModule.getArtistAlbums(artistUrl);
       next();
     }
   },
@@ -47,6 +45,11 @@ const routes: Array<RouteConfig> = [
     alias: '/',
     name: 'Artists',
     component: () => import(/* webpackChunkName: "artists" */ '@/views/Artists.vue')
+  },
+  {
+    path: '/album/:id',
+    name: 'Album',
+    component: () => import(/* webpackChunkName: "album" */ '@/views/Album.vue')
   },
   {
     path: '/404',

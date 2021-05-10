@@ -4,6 +4,13 @@ import { Language } from '@/common/constants/language';
 
 export type Tokens = { [k in ApiEndpoint]: string };
 
+export type AlbumFilterCriteria =
+  | 'all'
+  | 'released-first'
+  | 'not-released-first'
+  | 'only-not-released'
+  | 'only-released';
+
 export interface User {
   id: string;
   username: string;

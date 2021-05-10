@@ -1,4 +1,4 @@
-import { Nullable, isNull } from '@xbeat/toolkit';
+import { isNull, Nullable } from '@xbeat/toolkit';
 
 export class Album {
   constructor(

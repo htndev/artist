@@ -22,6 +22,11 @@
               </router-link>
             </q-item-label>
           </q-item>
+          <q-item class="items-center justify-end">
+            <q-item-label lines="1" class="font-size-16 full-width text-right">
+              <a :href="playerUrl" class="text-decoration-none text-black">{{ $t('back-to-player') }}</a>
+            </q-item-label>
+          </q-item>
           <q-item class="items-center justify-end" clickable>
             <q-item-label lines="1" @click="logout">{{ $t('logout') }}</q-item-label>
           </q-item>
@@ -36,8 +41,12 @@ import { Vue, Component } from 'vue-property-decorator';
 import { UserModule } from '@/store/modules/user';
 import { User } from '@/common/types';
 import { Nullable } from '@xbeat/toolkit';
+import { CLIENTS } from '@/common/constants/constants';
+
 @Component
 export default class TheHeader extends Vue {
+  playerUrl = CLIENTS.PLAYER;
+
   get user(): Nullable<User> {
     return UserModule.user;
   }

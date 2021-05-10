@@ -1,0 +1,5 @@
+mutation releaseAlbumNow($albumUrl: String!) {
+  releaseAlbumNow(albumUrl: $albumUrl) {
+    status
+  }
+}

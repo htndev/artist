@@ -2,14 +2,16 @@ import { studio } from '@/common/apollo/studio';
 import mediaEndpoint from '@/common/endpoints/media';
 import { Album } from '@/common/entities/album';
 import { ArtistEntity } from '@/common/entities/artist';
-import { Artist as ArtistType, Song } from '@/common/types';
+import { AlbumFilterCriteria, Artist as ArtistType, Song } from '@/common/types';
 import { InitializeStore } from '@/common/utils/initialize-store';
 import { sleep } from '@/common/utils/sleep';
+import ChangeAlbumReleaseDate from '@/graphql/ChangeAlbumReleaseDate.gql';
 import CreateNewAlbumMutation from '@/graphql/CreateNewAlbum.gql';
 import CreateNewArtistMutation from '@/graphql/CreateNewArtist.gql';
 import GetAlbumsQuery from '@/graphql/GetAlbums.gql';
 import IsArtistExistsQuery from '@/graphql/IsArtistExists.gql';
 import MyArtistsQuery from '@/graphql/MyArtists.gql';
+import ReleaseAlbumNowMutation from '@/graphql/ReleaseAlbumNow.gql';
 import UpdateArtistAvatarMutation from '@/graphql/UpdateArtistAvatar.gql';
 import UpdateArtistHeaderMutation from '@/graphql/UpdateArtistHeader.gql';
 import store from '@/store';
@@ -31,6 +33,7 @@ export default class Artist extends VuexModule implements InitializeStore {
   artistFetched = false;
   publishingSteps = 0;
   publishedSteps = 0;
+  albumsFilterCriteria: AlbumFilterCriteria = 'all';
 
   get hasUserArtists(): boolean {
     return !!this.artists.length;
@@ -38,6 +41,33 @@ export default class Artist extends VuexModule implements InitializeStore {
 
   get publishingPercentage(): number {
     return Math.round((100 / this.publishingSteps) * this.publishedSteps);
+  }
+
+  get filteredAlbums(): Album[] {
+    switch (this.albumsFilterCriteria) {
+      case 'only-released':
+        return this.currentArtistAlbums.filter(album => album.isReleased);
+      case 'only-not-released':
+        return this.currentArtistAlbums.filter(album => !album.isReleased);
+      case 'released-first': {
+        const notReleased = this.currentArtistAlbums.filter(album => !album.isReleased);
+        const released = this.currentArtistAlbums.filter(album => album.isReleased);
+        return [...released, ...notReleased];
+      }
+      case 'not-released-first': {
+        const released = this.currentArtistAlbums.filter(album => album.isReleased);
+        const notReleased = this.currentArtistAlbums.filter(album => !album.isReleased);
+        return [...notReleased, ...released];
+      }
+      case 'all':
+      default:
+        return this.currentArtistAlbums;
+    }
+  }
+
+  @Mutation
+  SET_ALBUM_FILTER_CRITERIA(filter: AlbumFilterCriteria): void {
+    this.albumsFilterCriteria = filter;
   }
 
   @Mutation
@@ -299,7 +329,7 @@ export default class Artist extends VuexModule implements InitializeStore {
     const newAlbum = {
       name,
       artistUrl: this.currentArtist?.url,
-      release: date,
+      release: '' + new Date(date).getTime(),
       cover: albumCover,
       songs: mappedSongs
     };
@@ -310,9 +340,37 @@ export default class Artist extends VuexModule implements InitializeStore {
     });
 
     this.SET_PUBLISHED_STEPS(this.publishedSteps + 1);
+    await this.getArtistAlbums(this.currentArtist!.url);
     await sleep(1000);
     this.ALBUM_PUBLISH_COMPLETED();
     this.RESET_PUBLISHING_STEPS();
+  }
+
+  @Action
+  async releaseAlbumNow(albumUrl: string): Promise<void> {
+    await studio.mutate({
+      mutation: ReleaseAlbumNowMutation,
+      variables: {
+        albumUrl
+      }
+    });
+
+    await this.getArtistAlbums(this.currentArtist!.url);
+  }
+
+  @Action
+  async changeAlbumReleaseDate({ albumUrl, releaseDate }: { albumUrl: string; releaseDate: Date }): Promise<void> {
+    await studio.mutate({
+      mutation: ChangeAlbumReleaseDate,
+      variables: {
+        changeReleaseDateInput: {
+          releaseDate: releaseDate.getTime(),
+          albumUrl
+        }
+      }
+    });
+
+    await this.getArtistAlbums(this.currentArtist!.url);
   }
 }
 

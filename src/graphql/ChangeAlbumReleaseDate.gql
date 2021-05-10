@@ -1,0 +1,5 @@
+mutation changeReleaseDate($changeReleaseDateInput: ChangeReleaseDate!) {
+  changeReleaseDate(changeReleaseDateInput: $changeReleaseDateInput) {
+    status
+  }
+}
