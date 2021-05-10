@@ -3,7 +3,12 @@ export class ReadonlySong {
   audio!: HTMLAudioElement;
   private isSongInitialized = false;
 
-  constructor(private readonly name: string, private readonly file: string, public readonly feats: FeatType[] = []) {}
+  constructor(
+    public readonly name: string,
+    public readonly url: string,
+    public readonly file: string,
+    public readonly feats: FeatType[] = []
+  ) {}
 
   async init(): Promise<this> {
     return new Promise(resolve => {

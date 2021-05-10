@@ -1,8 +1,9 @@
 <template>
   <q-header elevated class="header">
     <q-toolbar>
-      <router-link to="/">
+      <router-link to="/" class="flex items-center text-decoration-none">
         <logo small />
+        <span class="text-white text-h5 text-bold q-ml-sm">Artist</span>
       </router-link>
       <q-space />
       <avatar :avatar="avatar" :username="username">

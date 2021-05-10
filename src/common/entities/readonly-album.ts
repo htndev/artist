@@ -10,6 +10,14 @@ export class ReadonlyAlbum {
   ) {}
 
   get isSingle(): boolean {
+    return this.songs.length === 1;
+  }
+
+  get isAlbum(): boolean {
     return this.songs.length > 1;
+  }
+
+  get isReleased(): boolean {
+    return this.releaseDate < new Date();
   }
 }

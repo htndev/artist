@@ -89,20 +89,9 @@ import { ArtistEntity } from '@/common/entities/artist';
 import { ArtistModule } from '@/store/modules/artist';
 import { Artist } from '@/common/types';
 import { Song } from '@/common/entities/song';
+import { FormatFilter } from '@/common/mixin/format-filter';
 
-@Component({
-  filters: {
-    formatDuration(duration: number) {
-      const MINUTE = 60;
-      const hours = Math.round(duration / (MINUTE * MINUTE));
-      const minutes = Math.round(duration / MINUTE);
-      const seconds = Math.round(duration % MINUTE);
-      return `${hours > 0 ? `${hours < 10 ? '0' + hours : hours}` : ''}${minutes}:${
-        seconds < 10 ? '0' + seconds : seconds
-      }`;
-    }
-  }
-})
+@Component({ mixins: [FormatFilter] })
 export default class SongEditable extends Vue {
   isEditingMode = false;
   isSongPlaying = false;

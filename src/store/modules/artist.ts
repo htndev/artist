@@ -23,6 +23,7 @@ import { ExistsType } from '@xbeat/client-toolkit';
 import { isNull, Maybe, Nullable } from '@xbeat/toolkit';
 import Vue from 'vue';
 import { Action, getModule, Module, Mutation, VuexModule } from 'vuex-module-decorators';
+import DeleteAlbumMutation from '@/graphql/DeleteAlbum.gql';
 
 @Module({ dynamic: true, store, name: 'artist', namespaced: true })
 export default class Artist extends VuexModule implements InitializeStore {
@@ -30,6 +31,7 @@ export default class Artist extends VuexModule implements InitializeStore {
   isAlbumPublishing = false;
   isAlbumsFetching = false;
   isCurrentAlbumLoading = false;
+  isAlbumDeleting = false;
   artists: ArtistEntity[] = [];
   currentArtist: Nullable<ArtistEntity> = null;
   currentArtistAlbums: Album[] = [];
@@ -72,6 +74,16 @@ export default class Artist extends VuexModule implements InitializeStore {
   @Mutation
   SET_ALBUM_FILTER_CRITERIA(filter: AlbumFilterCriteria): void {
     this.albumsFilterCriteria = filter;
+  }
+
+  @Mutation
+  ALBUM_DELETION_STARTED(): void {
+    this.isAlbumDeleting = true;
+  }
+
+  @Mutation
+  ALBUM_DELETION_COMPLETED(): void {
+    this.isAlbumDeleting = false;
   }
 
   @Mutation
@@ -178,7 +190,7 @@ export default class Artist extends VuexModule implements InitializeStore {
   @Action
   async setCurrentAlbum(rawAlbum: RawAlbum): Promise<void> {
     const songs = await Promise.all(
-      rawAlbum.songs.map(song => new ReadonlySong(song.name, song.file, song.feat).init())
+      rawAlbum.songs.map(song => new ReadonlySong(song.name, song.url, song.file, song.feat).init())
     );
     this.SET_CURRENT_ALBUM(
       new ReadonlyAlbum(rawAlbum.name, rawAlbum.url, rawAlbum.cover, new Date(rawAlbum.released), songs)
@@ -412,6 +424,30 @@ export default class Artist extends VuexModule implements InitializeStore {
     });
 
     return albums;
+  }
+
+  @Action
+  async deleteAlbum(albumUrl: string): Promise<void> {
+    const album = this.currentArtistAlbums.find(album => album.url === albumUrl);
+
+    if (!album) {
+      return;
+    }
+
+    if (album.releaseDate < new Date()) {
+      return;
+    }
+
+    this.ALBUM_DELETION_STARTED();
+
+    await studio.mutate({
+      mutation: DeleteAlbumMutation,
+      variables: {
+        albumUrl
+      }
+    });
+
+    this.ALBUM_DELETION_COMPLETED();
   }
 }
 

@@ -105,10 +105,6 @@ export default class AlbumPlate extends Vue {
       position: 'bottom-right'
     });
   }
-
-  created(): void {
-    console.log(this.album.name, this.album.releaseDate, this.album.isReleased);
-  }
 }
 </script>
 

@@ -1,0 +1,5 @@
+mutation deleteAlbum($albumUrl: String!) {
+  deleteAlbum(url: $albumUrl) {
+    status
+  }
+}
