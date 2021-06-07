@@ -351,6 +351,7 @@ export default class Artist extends VuexModule implements InitializeStore {
     const uploadedSongsUrls: string[] = [];
 
     for (const song of songs) {
+      await sleep(3000);
       const {
         data: {
           files: [songUrl]
